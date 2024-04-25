@@ -1,12 +1,13 @@
 'use client'
 import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faEdit, 
   faTrash, 
   faSave, 
   faCancel 
 } from '@fortawesome/free-solid-svg-icons';
+import ActionButton from '@/components/ActionButton';
+import ConfirmationModal from '@/components/ConfirmationModal';
 
 const initialProducts: Product[] = [
   {
@@ -26,7 +27,12 @@ const initialProducts: Product[] = [
 const ProductsTable: React.FC = () => {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [editProductId, setEditProductId] = useState<number | null>(null);
+  const [modalOpen, setIsModalOpen] = useState<boolean>(false);
 
+  const handleConfirmAction = () => {
+    console.log('Action confirmed!');
+    // ADD DELETE HERE
+  };
 
   const updateProduct = (id: number, name: string, price: string, currency: string): void => {
     const updatedProducts = products.map(product =>
@@ -58,12 +64,8 @@ const ProductsTable: React.FC = () => {
           </select>
         </td>
         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-black">
-          <button onClick={() => onSave(product.id, name, price, currency)} className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded inline-flex items-center mr-2">
-            <FontAwesomeIcon className=' size-5' icon={faSave} size="2xs" />
-          </button>
-          <button onClick={() => setEditProductId(null)} className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
-            <FontAwesomeIcon className=' size-5' icon={faCancel} size="2xs" />
-          </button>
+        <ActionButton faIcon={faSave} onClick={() => onSave(product.id, name, price, currency)} />
+        <ActionButton faIcon={faCancel} onClick={() => setEditProductId(null)} />
         </td>
       </tr>
     );
@@ -94,22 +96,23 @@ const ProductsTable: React.FC = () => {
             <EditableRow key={product.id} product={product} onSave={updateProduct} />
           ) : (
             <tr key={product.id}>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-black">{product.name}</td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-black">{product.price}</td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-black">{product.currency}</td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm flex justify-between">
-                    <button onClick={() => setEditProductId(product.id)}className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded inline-flex items-center mr-2">
-                        <FontAwesomeIcon className=" size-5" icon={faEdit}/>
-                    </button>
-                    <button className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
-                        <FontAwesomeIcon className=' size-5' icon={faTrash} size="2xs" />
-                    </button>
-                </td>
+              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-black">{product.name}</td>
+              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-black">{product.price}</td>
+              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-black">{product.currency}</td>
+              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm flex justify-between">
+                <ActionButton faIcon={faEdit} onClick={() => setEditProductId(product.id)} />
+                <ActionButton faIcon={faTrash} onClick={() => setIsModalOpen(true)} />
+              </td>
             </tr>
           )
         ))}
       </tbody>
     </table>
+    <ConfirmationModal
+      isOpen={modalOpen}
+      setIsOpen={setIsModalOpen}
+      onConfirm={handleConfirmAction}
+    />
     </>
   );
 };
