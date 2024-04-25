@@ -11,11 +11,17 @@ export default function Home() {
   const setIsCreating = useBoundedState((state: any) => state.setIsCreating);
   const permissions = useBoundedState((state: any) => state.permissions);
   const setPermissions = useBoundedState((state: any) => state.setPermissions);
+  const setProducts = useBoundedState((state: any) => state.setProducts)
 
   useEffect(() => {
     fetch('/api/permissions')
       .then(response => response.json())
       .then(data => setPermissions(data.data.permissions))
+      .catch(error => console.error('There was an error fetching the permissions:', error));
+
+    fetch('/api/products')
+      .then(response => response.json())
+      .then(data => setProducts(data.data.products))
       .catch(error => console.error('There was an error fetching the permissions:', error));
   }, []);
 

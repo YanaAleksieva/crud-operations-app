@@ -10,23 +10,8 @@ import ActionButton from '@/components/ActionButton';
 import ConfirmationModal from '@/components/ConfirmationModal';
 import { useBoundedState } from '@/store/boundedStore';
 
-const initialProducts: Product[] = [
-  {
-    id : 1,
-    name : "TV",
-    price : "1000",
-    currency : "USD"
-  },
-  {
-    id : 2,
-    name : "SSD",
-    price : "100",
-    currency : "USD"
-  }
-];
-
 const ProductsTable: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>(initialProducts);
+  const products = useBoundedState((state: any) => state.products);
   const [editProductId, setEditProductId] = useState<number | null>(null);
   const [modalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -37,13 +22,13 @@ const ProductsTable: React.FC = () => {
     // ADD DELETE HERE
   };
 
-  const updateProduct = (id: number, name: string, price: string, currency: string): void => {
-    const updatedProducts = products.map(product =>
-      product.id === id ? { ...product, name, price, currency } : product
-    );
-    setProducts(updatedProducts);
-    setEditProductId(null);
-  };
+  // const updateProduct = (id: number, name: string, price: string, currency: string): void => {
+  //   const updatedProducts = products.map(product =>
+  //     product.id === id ? { ...product, name, price, currency } : product
+  //   );
+  //   setProducts(updatedProducts);
+  //   setEditProductId(null);
+  // };
 
   const EditableRow: React.FC<EditableRowProps> = ({ product, onSave }) => {
     const [name, setName] = useState(product.name);
@@ -96,9 +81,9 @@ const ProductsTable: React.FC = () => {
         </tr>
       </thead>
       <tbody>
-        {products.map(product => (
+        {products && products.length > 0 ? (products.map((product: Product) => (
           editProductId === product.id ? (
-            <EditableRow key={product.id} product={product} onSave={updateProduct} />
+            <EditableRow key={product.id} product={product} onSave={() => console.log('UPDATE')} />
           ) : (
             <tr key={product.id}>
               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-black">{product.name}</td>
@@ -116,7 +101,11 @@ const ProductsTable: React.FC = () => {
               )}
             </tr>
           )
-        ))}
+        ))) : (
+          <tr key={Math.random()}>
+            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-black">No data available</td>
+          </tr>
+        )}
       </tbody>
     </table>
     <ConfirmationModal
