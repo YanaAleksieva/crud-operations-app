@@ -8,6 +8,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import ActionButton from '@/components/ActionButton';
 import ConfirmationModal from '@/components/ConfirmationModal';
+import { useBoundedState } from '@/store/boundedStore';
 
 const initialProducts: Product[] = [
   {
@@ -28,6 +29,8 @@ const ProductsTable: React.FC = () => {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [editProductId, setEditProductId] = useState<number | null>(null);
   const [modalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const permissions = useBoundedState((state: any) => state.permissions);
 
   const handleConfirmAction = () => {
     console.log('Action confirmed!');
@@ -85,9 +88,11 @@ const ProductsTable: React.FC = () => {
           <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
             Currency
           </th>
+          {(permissions.includes('DELETE') || permissions.includes('UPDATE')) && 
           <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
             Actions
           </th>
+          }
         </tr>
       </thead>
       <tbody>
@@ -99,10 +104,16 @@ const ProductsTable: React.FC = () => {
               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-black">{product.name}</td>
               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-black">{product.price}</td>
               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-black">{product.currency}</td>
-              <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm flex justify-between">
-                <ActionButton faIcon={faEdit} onClick={() => setEditProductId(product.id)} />
-                <ActionButton faIcon={faTrash} onClick={() => setIsModalOpen(true)} />
-              </td>
+              {(permissions.includes('DELETE') || permissions.includes('UPDATE')) && 
+                (<td className={"px-5 py-5 border-b border-gray-200 bg-white text-sm flex justify-between"}>
+                  {permissions.includes('UPDATE') && (
+                    <ActionButton faIcon={faEdit} onClick={() => setEditProductId(product.id)} />
+                  )}
+                  {permissions.includes('DELETE') && ( 
+                    <ActionButton faIcon={faTrash} onClick={() => setIsModalOpen(true)} />
+                  )} 
+                </td>
+              )}
             </tr>
           )
         ))}

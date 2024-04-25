@@ -5,6 +5,7 @@ export type BoundedState = {
     setProducts: (products: Product[]) => void
     isCreating: boolean
     setIsCreating: () => void
+    permissions: string[]
 }
   
 export const useBoundedState = create((set) => ({
@@ -21,4 +22,6 @@ export const useBoundedState = create((set) => ({
     })),
     isCreating: false,
     setIsCreating: () => set((state: any) => ({isCreating: !state.isCreating})),
+    permissions: [],
+    setPermissions: (permissions: string[]) => set({ permissions })
 }))
