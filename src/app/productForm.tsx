@@ -6,7 +6,7 @@ import React from 'react';
 import { useBoundedState } from '../store/boundedStore';
 import { BoundedState } from '@/types/StoreTypes';
 
-const ProductForm = () => {
+const ProductForm: React.FC = () => {
   const setIsCreating = useBoundedState((state: BoundedState) => state.setIsCreating)
   const addProduct = useBoundedState((state: any) => state.addProduct)
 
