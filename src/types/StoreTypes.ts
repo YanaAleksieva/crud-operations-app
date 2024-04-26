@@ -5,6 +5,6 @@ export type BoundedState = {
     setIsCreating: () => void
     permissions: string[]
     setPermissions: (permissions: string[]) => void
-    selectedProductId: number | null
-    setSelectedProductId: (selectedProductId: number | null) => void
+    selectedProductId: number | string | null
+    setSelectedProductId: (selectedProductId: number | string | null) => void
 }

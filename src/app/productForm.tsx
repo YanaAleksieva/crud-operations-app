@@ -7,10 +7,8 @@ import { useBoundedState } from '../store/boundedStore';
 import { BoundedState } from '@/types/StoreTypes';
 
 const ProductForm = () => {
-
-  // const addProduct = useBoundedState((state: BoundedState) => state.addProduct)
   const setIsCreating = useBoundedState((state: BoundedState) => state.setIsCreating)
-  const addProduct = useBoundedState((state: any) => state.updatedProducts)
+  const addProduct = useBoundedState((state: any) => state.addProduct)
 
   return (
     <div className=" bg-gray-50 flex flex-col justify-center mt-6">
@@ -19,7 +17,7 @@ const ProductForm = () => {
           <Formik
             initialValues={{ name: '', currency: 'BGN', price: '' }}
             onSubmit={async (values, actions) => {
-              addProduct(values);
+              addProduct(values.name, values.currency, values.price);
               actions.setSubmitting(false);
               setIsCreating();
             }}

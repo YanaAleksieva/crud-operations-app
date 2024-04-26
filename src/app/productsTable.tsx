@@ -23,14 +23,6 @@ const ProductsTable: React.FC = () => {
     removeProduct(selectedProductId); 
   };
 
-  // const updateProduct = (id: number, name: string, price: string, currency: string): void => {
-  //   const updatedProducts = products.map(product =>
-  //     product.id === id ? { ...product, name, price, currency } : product
-  //   );
-  //   setProducts(updatedProducts);
-  //   setEditProductId(null);
-  // };
-
   return (
     <>
     <table className="table-auto mt-6 ">
@@ -54,7 +46,7 @@ const ProductsTable: React.FC = () => {
       </thead>
       <tbody>
         {products && products.length > 0 && (products.map((product: Product) => (
-          selectedProductId === product.id && isEditBtnClicked ? (
+          selectedProductId === product?.id && isEditBtnClicked ? (
             <EditableRow key={product.id} product={product} />
           ) : (
             <tr key={product.id}>

@@ -1,5 +1,10 @@
-import { BoundedState } from "@/types/StoreTypes"
-import { StoreApi, UseBoundStore, create } from "zustand"
+import { BoundedState } from "@/types/StoreTypes";
+import { 
+  StoreApi, 
+  UseBoundStore, 
+  create } 
+from "zustand";
+import { v4 as uuid } from "uuid";
   
 export const useBoundedState: UseBoundStore<StoreApi<BoundedState>> = create((set, get) => ({
     products: [],
@@ -9,7 +14,7 @@ export const useBoundedState: UseBoundStore<StoreApi<BoundedState>> = create((se
     permissions: [],
     setPermissions: (permissions: string[]) => set({ permissions }),
     selectedProductId: null,
-    setSelectedProductId: (selectedProductId: number | null) => set({ selectedProductId }),
+    setSelectedProductId: (selectedProductId: number | string | null) => set({ selectedProductId }),
     removeProduct: async (productId: number) => {
         try {
           const response = await fetch('http://localhost:3000/api/products/delete', {
@@ -33,41 +38,31 @@ export const useBoundedState: UseBoundStore<StoreApi<BoundedState>> = create((se
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ productId }),
+            body: JSON.stringify({ productId, name, currency, price }),
           });
           if (!response.ok) throw new Error('Something went wrong!');
           const updatedProducts = get().products.map((product: any) => product.id === productId ? {...product, name, currency, price } : product);
-          console.log(updatedProducts);
           set({ products: updatedProducts });
         } catch (error) {
           console.error("Failed to delete product:", error);
         }
       },
     addProduct: async (name: string, currency: string, price: number) => {
+      const id = uuid();
         try {
           const response = await fetch('http://localhost:3000/api/products/create', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ name, currency, price})
+            body: JSON.stringify({ id, name, currency, price})
           });
-          const result = await response.json();
-          if (response.ok) {
-            set(state => ({
-              products: [...state.products, result.product]
-            }));
-            return result;
-          } else {
-            throw new Error(result.message || 'Failed to add product');
-          }
+          if (!response.ok) throw new Error('Something went wrong!');
+          const updatedProducts = [...get().products, { id, name, currency, price}]
+          set({products: updatedProducts})
         } catch (error) {
           console.error('Error adding product:', error);
           throw error;
         }
       }
 }))
-
-    // updateProduct: (id: string, name: string, currency: string, price: number) => set((state: any) => ({
-    //     products: state.products.map((product: any) => product.id === id ? {...product, name, currency, price } : product)
-    // }))

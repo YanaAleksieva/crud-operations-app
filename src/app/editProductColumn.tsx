@@ -28,7 +28,12 @@ const EditableRow: React.FC<EditableRowProps> = ({ product }) => {
           </select>
         </td>
         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-black">
-          <ActionButton faIcon={faSave} onClick={() => {updatedProducts(product.id, product.name, product.currency, product.price); setSelectedProductId(null)}} />
+          <ActionButton 
+            faIcon={faSave}
+            onClick={() => {
+              updatedProducts(product.id, name, currency, price);
+              setSelectedProductId(null)}} 
+            />
           <ActionButton faIcon={faCancel} onClick={() => setSelectedProductId(null)} />
         </td>
       </tr>
@@ -37,6 +42,3 @@ const EditableRow: React.FC<EditableRowProps> = ({ product }) => {
   };
 
   export default EditableRow;
-
-
-
