@@ -9,6 +9,7 @@ import ConfirmationModal from '@/components/ConfirmationModal';
 import { useBoundedState } from '@/store/boundedStore';
 import { BoundedState } from '@/types/StoreTypes';
 import EditableRow from './editProductColumn';
+import { PermissionsEnum } from '@/types/Permissions';
 
 const ProductsTable: React.FC = () => {
   const products = useBoundedState((state: BoundedState) => state.products);
@@ -37,7 +38,7 @@ const ProductsTable: React.FC = () => {
           <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
             Currency
           </th>
-          {(permissions.includes('DELETE') || permissions.includes('UPDATE')) && 
+          {(permissions.includes(PermissionsEnum.DELETE) || permissions.includes(PermissionsEnum.UPDATE)) && 
           <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
             Actions
           </th>
@@ -53,12 +54,12 @@ const ProductsTable: React.FC = () => {
               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-black">{product.name}</td>
               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-black">{product.price}</td>
               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-black">{product.currency}</td>
-              {(permissions.includes('DELETE') || permissions.includes('UPDATE')) && 
+              {(permissions.includes(PermissionsEnum.DELETE) || permissions.includes(PermissionsEnum.UPDATE)) && 
                 (<td className={"px-5 py-5 border-b border-gray-200 bg-white text-sm flex justify-between"}>
-                  {permissions.includes('UPDATE') && (
+                  {permissions.includes(PermissionsEnum.UPDATE) && (
                     <ActionButton faIcon={faEdit} onClick={() => {setSelectedProductId(product.id); setIsEditBtnClicked(true) }} />
                   )}
-                  {permissions.includes('DELETE') && ( 
+                  {permissions.includes(PermissionsEnum.DELETE) && ( 
                     <ActionButton faIcon={faTrash} onClick={() => {setSelectedProductId(product.id); setIsEditBtnClicked(false); setIsModalOpen(true)}}/>
                   )} 
                 </td>
