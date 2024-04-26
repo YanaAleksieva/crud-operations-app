@@ -4,11 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Formik, Form, Field } from 'formik';
 import React from 'react';
 import { useBoundedState } from '../store/boundedStore';
+import { BoundedState } from '@/types/StoreTypes';
 
 const ProductForm = () => {
 
-  const addProduct = useBoundedState((state: any) => state.addProduct)
-  const setIsCreating = useBoundedState((state: any) => state.setIsCreating)
+  // const addProduct = useBoundedState((state: BoundedState) => state.addProduct)
+  const setIsCreating = useBoundedState((state: BoundedState) => state.setIsCreating)
+  const addProduct = useBoundedState((state: any) => state.updatedProducts)
 
   return (
     <div className=" bg-gray-50 flex flex-col justify-center mt-6">
@@ -17,9 +19,9 @@ const ProductForm = () => {
           <Formik
             initialValues={{ name: '', currency: 'BGN', price: '' }}
             onSubmit={async (values, actions) => {
-              console.log(values);
+              addProduct(values);
               actions.setSubmitting(false);
-              setIsCreating(false);
+              setIsCreating();
             }}
           >
             {formik => (
@@ -52,7 +54,7 @@ const ProductForm = () => {
                     <FontAwesomeIcon className=" size-5 mr-1" icon={faSave}/>
                     <span>Save</span>
                   </button>
-                  <button className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded inline-flex items-center" onClick={() => setIsCreating(false)}>
+                  <button className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded inline-flex items-center" onClick={() => setIsCreating()}>
                      <FontAwesomeIcon className=' size-5 mr-1' icon={faCancel} />
                      <span>Cancel</span>
                   </button>

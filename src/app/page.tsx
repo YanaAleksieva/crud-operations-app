@@ -5,13 +5,14 @@ import ActionButton from "@/components/ActionButton";
 import { useBoundedState } from "@/store/boundedStore";
 import ProductForm from "./productForm";
 import { useEffect } from "react";
+import { BoundedState } from "@/types/StoreTypes";
 
 export default function Home() {
-  const isCreating = useBoundedState((state: any) => state.isCreating);
-  const setIsCreating = useBoundedState((state: any) => state.setIsCreating);
-  const permissions = useBoundedState((state: any) => state.permissions);
-  const setPermissions = useBoundedState((state: any) => state.setPermissions);
-  const setProducts = useBoundedState((state: any) => state.setProducts)
+  const isCreating = useBoundedState((state: BoundedState) => state.isCreating);
+  const setIsCreating = useBoundedState((state: BoundedState) => state.setIsCreating);
+  const permissions = useBoundedState((state: BoundedState) => state.permissions);
+  const setPermissions = useBoundedState((state: BoundedState) => state.setPermissions);
+  const setProducts = useBoundedState((state: BoundedState) => state.setProducts)
 
   useEffect(() => {
     fetch('/api/permissions')

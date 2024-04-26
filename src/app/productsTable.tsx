@@ -2,24 +2,25 @@
 import React, { useState } from 'react';
 import { 
   faEdit, 
-  faTrash, 
-  faSave, 
-  faCancel 
+  faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import ActionButton from '@/components/ActionButton';
 import ConfirmationModal from '@/components/ConfirmationModal';
 import { useBoundedState } from '@/store/boundedStore';
+import { BoundedState } from '@/types/StoreTypes';
+import EditableRow from './editProductColumn';
 
 const ProductsTable: React.FC = () => {
-  const products = useBoundedState((state: any) => state.products);
-  const [editProductId, setEditProductId] = useState<number | null>(null);
+  const products = useBoundedState((state: BoundedState) => state.products);
+  const selectedProductId = useBoundedState((state: BoundedState) => state.selectedProductId);
+  const setSelectedProductId = useBoundedState((state: BoundedState) => state.setSelectedProductId);
+  const removeProduct = useBoundedState((state: any) => state.removeProduct);
+  const permissions = useBoundedState((state: BoundedState) => state.permissions);
   const [modalOpen, setIsModalOpen] = useState<boolean>(false);
-
-  const permissions = useBoundedState((state: any) => state.permissions);
+  const [isEditBtnClicked, setIsEditBtnClicked]  = useState<boolean>(false);
 
   const handleConfirmAction = () => {
-    console.log('Action confirmed!');
-    // ADD DELETE HERE
+    removeProduct(selectedProductId); 
   };
 
   // const updateProduct = (id: number, name: string, price: string, currency: string): void => {
@@ -29,35 +30,6 @@ const ProductsTable: React.FC = () => {
   //   setProducts(updatedProducts);
   //   setEditProductId(null);
   // };
-
-  const EditableRow: React.FC<EditableRowProps> = ({ product, onSave }) => {
-    const [name, setName] = useState(product.name);
-    const [price, setPrice] = useState(product.price);
-    const [currency, setCurrency] = useState(product.currency);
-
-    return (
-      <tr>
-        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-black">
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="p-2 border rounded text-black" />
-        </td>
-        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-black"> 
-          <input type="text" value={price} onChange={(e) => setPrice(e.target.value)} className="p-2 border rounded" />
-        </td>
-        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-black">
-          {/* <input type="text" value={currency} onChange={(e) => setCurrency(e.target.value)} className="p-2 border rounded" /> */}
-          <select id="currency" name="currency" value={currency} onChange={(e) => setCurrency(e.target.value)} className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-            <option value="USD">USD</option>
-            <option value="EUR">EUR</option>
-            <option value="BGN">BGN</option>
-          </select>
-        </td>
-        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-black">
-        <ActionButton faIcon={faSave} onClick={() => onSave(product.id, name, price, currency)} />
-        <ActionButton faIcon={faCancel} onClick={() => setEditProductId(null)} />
-        </td>
-      </tr>
-    );
-  };
 
   return (
     <>
@@ -81,9 +53,9 @@ const ProductsTable: React.FC = () => {
         </tr>
       </thead>
       <tbody>
-        {products && products.length > 0 ? (products.map((product: Product) => (
-          editProductId === product.id ? (
-            <EditableRow key={product.id} product={product} onSave={() => console.log('UPDATE')} />
+        {products && products.length > 0 && (products.map((product: Product) => (
+          selectedProductId === product.id && isEditBtnClicked ? (
+            <EditableRow key={product.id} product={product} />
           ) : (
             <tr key={product.id}>
               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-black">{product.name}</td>
@@ -92,16 +64,17 @@ const ProductsTable: React.FC = () => {
               {(permissions.includes('DELETE') || permissions.includes('UPDATE')) && 
                 (<td className={"px-5 py-5 border-b border-gray-200 bg-white text-sm flex justify-between"}>
                   {permissions.includes('UPDATE') && (
-                    <ActionButton faIcon={faEdit} onClick={() => setEditProductId(product.id)} />
+                    <ActionButton faIcon={faEdit} onClick={() => {setSelectedProductId(product.id); setIsEditBtnClicked(true) }} />
                   )}
                   {permissions.includes('DELETE') && ( 
-                    <ActionButton faIcon={faTrash} onClick={() => setIsModalOpen(true)} />
+                    <ActionButton faIcon={faTrash} onClick={() => {setSelectedProductId(product.id); setIsEditBtnClicked(false); setIsModalOpen(true)}}/>
                   )} 
                 </td>
               )}
             </tr>
           )
-        ))) : (
+        )))}
+        {!products &&  (
           <tr key={Math.random()}>
             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-black">No data available</td>
           </tr>

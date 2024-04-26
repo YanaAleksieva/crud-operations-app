@@ -7,5 +7,4 @@ interface Product {
   
 interface EditableRowProps {
     product: Product;
-    onSave: (id: number, name: string, price: string, currency: string) => void;
 }

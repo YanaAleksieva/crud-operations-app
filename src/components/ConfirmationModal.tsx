@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 const ConfirmationModal = ({ isOpen, setIsOpen, onConfirm }: any) => {
   if (!isOpen) return null;
