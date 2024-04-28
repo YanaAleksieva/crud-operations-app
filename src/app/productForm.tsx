@@ -1,7 +1,14 @@
 'use client'
-import { faCancel, faSave } from '@fortawesome/free-solid-svg-icons';
+import { 
+  faCancel, 
+  faSave 
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Formik, Form, Field } from 'formik';
+import { 
+  Formik, 
+  Form, 
+  Field 
+} from 'formik';
 import React from 'react';
 import { useBoundedState } from '../store/boundedStore';
 import { BoundedState } from '@/types/StoreTypes';
