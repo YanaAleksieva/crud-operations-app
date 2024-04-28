@@ -15,13 +15,13 @@ const ProductsTable: React.FC = () => {
   const products = useBoundedState((state: BoundedState) => state.products);
   const selectedProductId = useBoundedState((state: BoundedState) => state.selectedProductId);
   const setSelectedProductId = useBoundedState((state: BoundedState) => state.setSelectedProductId);
-  const removeProduct = useBoundedState((state: any) => state.removeProduct);
+  const removeProduct = useBoundedState((state: BoundedState) => state.removeProduct);
   const permissions = useBoundedState((state: BoundedState) => state.permissions);
   const [modalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isEditBtnClicked, setIsEditBtnClicked]  = useState<boolean>(false);
 
   const handleConfirmAction = () => {
-    removeProduct(selectedProductId); 
+    removeProduct(selectedProductId ? selectedProductId : ''); 
   };
 
   return (
@@ -67,7 +67,7 @@ const ProductsTable: React.FC = () => {
             </tr>
           )
         )))}
-        {!products &&  (
+        {(!products || products.length === 0) &&  (
           <tr key={Math.random()}>
             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-black">No data available</td>
           </tr>

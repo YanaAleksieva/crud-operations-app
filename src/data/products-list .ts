@@ -1,4 +1,4 @@
-{
+export const productsList = {
   "products" : [
     {
       "id" : 1,

@@ -24,7 +24,7 @@ const Home = () => {
 
     fetch('/api/products')
       .then(response => response.json())
-      .then(data => setProducts(data.data.products))
+      .then(data => setProducts(data))
       .catch(error => console.error('There was an error fetching the permissions:', error));
   }, []);
 

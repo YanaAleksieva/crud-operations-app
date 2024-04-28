@@ -9,7 +9,7 @@ const EditableRow: React.FC<EditableRowProps> = ({ product }) => {
     const [price, setPrice] = useState(product.price);
     const [currency, setCurrency] = useState(product.currency);
     const setSelectedProductId = useBoundedState((state: BoundedState) => state.setSelectedProductId);
-    const updatedProducts = useBoundedState((state: any) => state.updatedProducts);
+    const updatedProducts = useBoundedState((state: BoundedState) => state.updatedProducts);
 
     return (
       <tr>

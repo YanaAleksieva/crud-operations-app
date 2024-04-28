@@ -8,7 +8,7 @@ import { BoundedState } from '@/types/StoreTypes';
 
 const ProductForm: React.FC = () => {
   const setIsCreating = useBoundedState((state: BoundedState) => state.setIsCreating)
-  const addProduct = useBoundedState((state: any) => state.addProduct)
+  const addProduct = useBoundedState((state: BoundedState) => state.addProduct)
 
   return (
     <div className=" bg-gray-50 flex flex-col justify-center mt-6">
